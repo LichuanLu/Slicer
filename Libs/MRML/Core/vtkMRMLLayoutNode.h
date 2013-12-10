@@ -111,6 +111,8 @@ public:
       SlicerLayoutFourByTwoSliceView,
       SlicerLayoutFiveByTwoSliceView,
       SlicerLayoutThreeByThreeSliceView,
+	  //add by lichuan
+	  SlicerLayoutTwoChartsSliceView=80,
       SlicerLayoutCustomView = 99,
       SlicerLayoutUserView = 100
     };

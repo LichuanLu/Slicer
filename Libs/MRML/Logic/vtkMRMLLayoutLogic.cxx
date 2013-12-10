@@ -917,6 +917,20 @@ const char* threeByThreeSliceView =
   " </item>"
   "</layout>";
 
+//add by lichuan , add one more layout for chart
+const char* twoChartsSlicerView = 
+ "<layout type=\"vertical\">"
+  " <item>"
+  "  <view class=\"vtkMRMLChartViewNode\" singletontag=\"ChartView1\">"
+  "    <property name=\"viewlabel\" action=\"default\">1</property>"
+  "  </view>"
+  " </item>"
+  " <item>"
+  "  <view class=\"vtkMRMLChartViewNode\" singletontag=\"ChartView2\">"
+  "    <property name=\"viewlabel\" action=\"default\">2</property>"
+  "  </view>"
+  " </item>"
+  "</layout>";
 
 //----------------------------------------------------------------------------
 vtkCxxRevisionMacro(vtkMRMLLayoutLogic, "$Revision$");
@@ -1358,6 +1372,10 @@ void vtkMRMLLayoutLogic::AddDefaultLayouts()
                                          fiveByTwoSliceView);
   this->LayoutNode->AddLayoutDescription(vtkMRMLLayoutNode::SlicerLayoutThreeByThreeSliceView,
                                          threeByThreeSliceView);
+
+  //add by lichuan for two chart
+    this->LayoutNode->AddLayoutDescription(vtkMRMLLayoutNode::SlicerLayoutTwoChartsSliceView,
+                                         twoChartsSlicerView);
   // add the CompareView modes which are defined programmatically
   this->UpdateCompareViewLayoutDefinitions();
   this->LayoutNode->EndModify(wasModifying);

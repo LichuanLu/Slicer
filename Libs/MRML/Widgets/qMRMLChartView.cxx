@@ -224,32 +224,37 @@ void qMRMLChartViewPrivate::updateWidgetFromMRML()
   QStringList plotOptions;
 
   const char *type = cn->GetProperty("default", "type");
-
-  if (!type || (type && !strcmp(type, "Line")))
-    {
-    // line charts are the default
-    plotData << this->lineData(cn);
-    plotXAxisTicks << this->lineXAxisTicks(cn);
-    plotOptions << this->lineOptions(cn);
-    }
-  else if (type && !strcmp(type, "Scatter"))
-    {
-    plotData << this->scatterData(cn);
-    plotXAxisTicks << this->scatterXAxisTicks(cn);
-    plotOptions << this->scatterOptions(cn);
-    }
-  else if (type && !strcmp(type, "Bar"))
-    {
-    plotData << this->barData(cn);
-    plotXAxisTicks << this->barXAxisTicks(cn);
-    plotOptions << this->barOptions(cn);
-    }
-  else if (type && !strcmp(type, "Box"))
-    {
-    plotData << this->boxData(cn);
-    plotXAxisTicks << this->boxXAxisTicks(cn);
-    plotOptions << this->boxOptions(cn);
-    }
+  //add by lichuan, if cusData has data , don't need the plotData , plotXAxis and option
+  QString cusData = this->cusWrapData(cn) ;
+  if(cusData.isNull() || cusData.isEmpty())
+  {
+	
+	  if (!type || (type && !strcmp(type, "Line")))
+		{
+		// line charts are the default
+		plotData << this->lineData(cn);
+		plotXAxisTicks << this->lineXAxisTicks(cn);
+		plotOptions << this->lineOptions(cn);
+		}
+	  else if (type && !strcmp(type, "Scatter"))
+		{
+		plotData << this->scatterData(cn);
+		plotXAxisTicks << this->scatterXAxisTicks(cn);
+		plotOptions << this->scatterOptions(cn);
+		}
+	  else if (type && !strcmp(type, "Bar"))
+		{
+		plotData << this->barData(cn);
+		plotXAxisTicks << this->barXAxisTicks(cn);
+		plotOptions << this->barOptions(cn);
+		}
+	  else if (type && !strcmp(type, "Box"))
+		{
+		plotData << this->boxData(cn);
+		plotXAxisTicks << this->boxXAxisTicks(cn);
+		plotOptions << this->boxOptions(cn);
+		}
+  }
 
   // resize slot - represented in javascript
   // pass in resetAxes: true option to get rid of old ticks and axis properties
@@ -318,10 +323,19 @@ void qMRMLChartViewPrivate::updateWidgetFromMRML()
   plot << 
     "<div id=\"chart\"></div>"                       // 2. container for the chart
     "<script class=\"code\" type=\"text/javascript\">"    // 3. container for js
-    "$(document).ready(function(){";                 // 4. ready function     
-  plot << plotData;     // insert data
-  plot << plotXAxisTicks;  // insert ticks if needed
-  plot << plotOptions;  // insert options
+    "$(document).ready(function(){";                 // 4. ready function  
+  //add by lichuan,if have cusData , then use it instead plotData ,XAxis and option
+  if(!(cusData.isNull() || cusData.isEmpty()))
+  {
+	  plot << cusData;
+  }
+  else
+  {
+	  plot << plotData;     // insert data
+	  plot << plotXAxisTicks;  // insert ticks if needed
+	  plot << plotOptions;  // insert options
+  }
+  
   plot << 
     "var plot1 = $.jqplot ('chart', data, options);";  // call the plot
   plot << plotResizeSlot;        // insert definition of the resizeSlot
@@ -603,6 +617,17 @@ QString qMRMLChartViewPrivate::seriesDependentDataString(vtkMRMLDoubleArrayNode 
   data << "]";
 
   return data.join("");
+}
+//-------------------------added by lichuan
+QString qMRMLChartViewPrivate::cusWrapData(vtkMRMLChartNode *cn)
+{
+	QString data;
+	const char *cusData = cn->GetProperty("default", "cusWrapData");
+	if(cusData){
+	   data = QString(QLatin1String(cusData)) ;
+	}
+	return data;
+
 }
 
 //---------------------------------------------------------------------------

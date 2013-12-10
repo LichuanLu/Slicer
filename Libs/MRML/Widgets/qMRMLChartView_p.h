@@ -159,6 +159,9 @@ protected:
   // Generate a string of options for a bar chart
   QString boxOptions(vtkMRMLChartNode*);
 
+  //added by lichuan , using customize wrapped js code
+  QString cusWrapData(vtkMRMLChartNode*);
+
   // Generate a string containing the options that are common to all
   // char types
   QString genericOptions(vtkMRMLChartNode*, bool rotateXTickLabels = false);
