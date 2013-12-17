@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>3D Slicer</string>
+   <string>BrainAS</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../SlicerApp.qrc">
